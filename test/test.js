@@ -1,7 +1,9 @@
 const button = document.getElementById('askBtn');
 const input = document.getElementById('question');
 const chat = document.getElementById('chat');
-const history = []; // stocke le contexte de la conversation
+
+const history = [];
+
 const URL = "https://ollama.api.homelab.chalumoid.fr/v1/chat/completions";
 const TOKEN = "sk-6VAwClwYxrltMQORMz2m6w";
 
@@ -24,18 +26,20 @@ button.addEventListener('click', async () => {
   const loadingDiv = document.createElement('div');
   loadingDiv.textContent = 'Chargement…';
   chat.appendChild(loadingDiv);
+
+  // Désactive le bouton
+  button.disabled = true;
   chat.scrollTop = chat.scrollHeight;
 
-  // Prépare le body comme dans ton premier code
   const body = {
-    model: "gemma3:4b",  // modèle de ton premier code
+    model: "gemma3:4b",  
     messages: history,
     keep_alive: -1,
     stream: false
   };
 
   try {
-    const res = await fetch(URL, {  // utilise l'URL et le TOKEN de ton premier code
+    const res = await fetch(URL, {  
       method: "POST",
       headers: {
         Authorization: `Bearer ${TOKEN}`,
@@ -50,6 +54,9 @@ button.addEventListener('click', async () => {
     // Supprime le message de chargement
     chat.removeChild(loadingDiv);
 
+    // Réactive le bouton
+    button.disabled = false;
+
     // Affiche le message de l'IA
     const aiDiv = document.createElement('div');
     aiDiv.textContent = 'IA : ' + aiMessage;
@@ -61,5 +68,6 @@ button.addEventListener('click', async () => {
 
   } catch (err) {
     loadingDiv.textContent = 'Erreur : ' + err.message;
+    button.disabled = false; // aussi réactiver en cas d'erreur
   }
 });
