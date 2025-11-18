@@ -2,23 +2,25 @@ const button = document.getElementById('askBtn');
 const input = document.getElementById('question');
 const chat = document.getElementById('chat');
 
-const history = [];
+import { prompts } from "../JS/prompt.js";
+
+input.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') {
+    e.preventDefault(); // évite le saut de ligne
+    button.click();     // déclenche le même code que le bouton
+  }
+});
+
+const history = [ {
+  role: "system",
+  content: prompts
+}
+
+,];
 
 const URL = "https://ollama.api.homelab.chalumoid.fr/v1/chat/completions";
 const TOKEN = "sk-6VAwClwYxrltMQORMz2m6w";
 
-const gameRules = `Bonjour Paul, tu es la derniere personne....`;
-
-document.addEventListener('DOMContentLoaded', function() {
-    // Ajouter les règles au chat
-    const chat = document.getElementById('chat');
-    const rulesElement = document.createElement('div');
-    rulesElement.className = 'rules-message';
-    rulesElement.innerHTML = `<strong>Règles du jeu :</strong><br>${gameRules}`;
-    chat.appendChild(rulesElement);
-});
-
-// UN SEUL écouteur d'événement pour le bouton
 button.addEventListener('click', async () => {
   const message = input.value.trim();
   if (!message) return;
@@ -82,13 +84,6 @@ button.addEventListener('click', async () => {
     loadingDiv.textContent = 'Erreur : ' + err.message;
     button.disabled = false; // aussi réactiver en cas d'erreur
   }
-});
-
-// Écouteur pour la touche Entrée
-input.addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') {
-        button.click(); // Déclenche le clic sur le bouton
-    }
 });
 
 // === SYSTÈME D'ÉTAPES AVEC BOUTON HTML ===
