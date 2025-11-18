@@ -4,6 +4,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Negociation</title>
     <link rel="stylesheet" href="/CSS/style.css">
+    <script type="module" src="/test/test.js"></script>
 </head>
 <body>
     <div class="game-container">
@@ -20,7 +21,9 @@
         </div>
             </div>
         <div class="chat-bubble">
-        <p>Pose-moi une question...</p>
+            <div id="chat"></div>
+            <input id="question" type="text" placeholder="Parler a l'ia">
+            <button id="askBtn">Envoyer</button>
         </div>
     </div>
 </body>
