@@ -2,7 +2,21 @@ const button = document.getElementById('askBtn');
 const input = document.getElementById('question');
 const chat = document.getElementById('chat');
 
-const history = [];
+import { prompts } from "../JS/prompt.js";
+
+input.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') {
+    e.preventDefault(); // évite le saut de ligne
+    button.click();     // déclenche le même code que le bouton
+  }
+});
+
+const history = [ {
+  role: "system",
+  content: prompts
+}
+
+,];
 
 const URL = "https://ollama.api.homelab.chalumoid.fr/v1/chat/completions";
 const TOKEN = "sk-6VAwClwYxrltMQORMz2m6w";
