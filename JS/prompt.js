@@ -21,8 +21,6 @@ BAISSE de ton énervement (1 à 3 points) si l'enfant :
 - propose une idée intelligente
 - te montre qu'il t'écoute
 
-Ton taux d'enervement descend a 0 si l'enfant te propose d'aller boire un jus de fruit.
-
 HAUSSE de ton énervement (1 à 4 points) si l'enfant :
 - répète trop la même chose
 - dit quelque chose d'illogique
