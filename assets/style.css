@@ -1,0 +1,96 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+
+.game-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* .background {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;   
+    transform: translate(-50%, -50%);
+    z-index: 1;         
+} */
+
+
+#monstre {
+    position: absolute;
+    z-index: 2;          
+    left: 25%;
+    bottom: 5%;         
+    transform: translateX(-50%);
+}
+
+.monster {
+    width: 300px;        
+}
+
+.hud {
+    position: absolute;
+    top: 20px;
+    left: 80%;
+    z-index: 3;
+}
+
+.bonheur-label {
+    margin-bottom: 5px;
+    font-size: 16px;
+    text-shadow: 1px 1px 2px #000;
+}
+
+.bonheur-bar {
+    width: 200px;          
+    height: 20px;          
+    border: 2px solid #000000;
+    background: transparent;
+    border-radius: 5px;
+    overflow: hidden;
+    
+}
+
+.bonheur-fill {
+    height: 100%;
+    background: linear-gradient(to right, #00ff00, #ff1313);
+}
+
+.chat-bubble {
+    position: absolute;
+    bottom: 50%;   /* en bas */
+    right: 50%;    /* à droite */
+    max-width: 260px;
+
+    background: white;
+    border: 2px solid #000;
+    border-radius: 10px;
+    padding: 10px 12px;
+
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    color: #000;
+
+    z-index: 5;
+}
+
+.chat-bubble::after {
+    content: "";
+    position: absolute;
+    bottom: -8px;
+    right: 25px;
+
+    border-width: 8px;
+    border-style: solid;
+    border-color: white transparent transparent transparent;
+}
