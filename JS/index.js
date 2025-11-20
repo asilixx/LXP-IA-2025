@@ -168,7 +168,7 @@ async function analyzeAnger(auraMessage) {
     const raw = data.choices[0].message.content;
 
     // Essaie de lire le JSON
-    anger = null;
+    anger = 0;
     try {
       anger = JSON.parse(raw).anger;
     } catch (e) {
@@ -193,8 +193,8 @@ let minuteglobale = 0;
 let secondeglobale = 0;
 
 export function startTimer() {
-  let minute = 2;
-  let seconde = 30;
+  let minute = 0;
+  let seconde = 10;
 
   intervalId = setInterval(() => {
 
@@ -228,8 +228,10 @@ export function startTimer() {
 
 function testAnger() {
     if (anger >= 10 ) {
+        clearInterval(intervalId)
         handleLose();
     } else if (anger <= 1) {
+        clearInterval(intervalId);
         handleWin();
     }
 }
