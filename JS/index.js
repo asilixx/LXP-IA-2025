@@ -116,12 +116,51 @@ function showNextStep() {
     
     chat.innerHTML = `<div class="rules-message"><strong>Règles du jeu :</strong><br>${gameSteps[currentStep]}</div>`;
     
+    // Définir le texte du bouton
     nextBtn.textContent = currentStep === gameSteps.length - 1 ? 'Commencer' : 'Suivant';
     
     currentStep++;
+
+    
+    if (nextBtn.textContent === 'Commencer') {
+        nextBtn.onclick = () => {
+            startTimer();        
+            showNextStep();      
+        };
+    }
 }
+
 
 document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('nextBtn').addEventListener('click', showNextStep);
     showRulesWithNextButton();
 });
+
+
+let intervalId;
+let dixiemeglobale = 0;
+let minuteglobale = 0;
+let secondeglobale = 0;
+
+export function startTimer() {
+  let minute = 0;
+  let seconde = 0;
+  let dixieme = 0;
+  intervalId = setInterval(() => {
+    seconde++;
+    secondeglobale = seconde;
+    if (seconde === 60) {
+      seconde = 0;
+      secondeglobale = seconde;
+      minute++;
+      minuteglobale = minute;
+    }
+    if (seconde >= 10) {
+      dixieme = "";
+      dixiemeglobale = dixieme;
+    }
+
+    const timerDisplay = document.getElementById("timer");
+    timerDisplay.textContent = `Timer : ${minute}'${dixieme}${seconde}`;
+  }, 1000);
+}
