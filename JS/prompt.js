@@ -21,8 +21,7 @@ Règles :
 6. Ne pose pas de questions compliquées ou inutiles.
 
 
-`;
-
+; `
 export const promptAnger = `Tu es une IA qui analyse l’émotion d’un texte.
 
 [TÂCHE]
@@ -59,6 +58,16 @@ Analyse le texte fourni et renvoie uniquement le JSON demandé.
 
 `;
 
+{"delta": X}
 
+(X étant -1, 0 ou +1)
 
+[INTERDIT]
+- Aucun commentaire
+- Aucun markdown
+- Aucune phrase
+- Aucun symbole en plus
+- Uniquement le JSON
 
+[INSTRUCTION FINALE]
+Analyse le texte fourni et renvoie uniquement le JSON demandé. `;
