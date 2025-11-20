@@ -53,4 +53,21 @@ Tu dois renvoyer UNIQUEMENT un JSON valide, sans texte avant ou après :
 - Uniquement le JSON
 
 [INSTRUCTION FINALE]
+Analyse le texte fourni et renvoie uniquement le JSON demandé.
+
+
+`;
+
+{"delta": X}
+
+(X étant -1, 0 ou +1)
+
+[INTERDIT]
+- Aucun commentaire
+- Aucun markdown
+- Aucune phrase
+- Aucun symbole en plus
+- Uniquement le JSON
+
+[INSTRUCTION FINALE]
 Analyse le texte fourni et renvoie uniquement le JSON demandé. `;
