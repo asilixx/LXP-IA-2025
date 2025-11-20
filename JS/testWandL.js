@@ -187,6 +187,5 @@ function updateAnger(newValue) {
 }
 
 // TESTS
-updateAnger(9);  
-  
+updateAnger(5);  
 }
