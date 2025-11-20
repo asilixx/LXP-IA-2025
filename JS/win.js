@@ -1,19 +1,91 @@
 export function handleWin() {
     console.log("🎉 Victoire ! L'IA se calme et le monde est sauvé !");
-    
+
+    // Overlay plein écran
     const winScreen = document.createElement("div");
-    winScreen.innerHTML = `
+    winScreen.style.cssText = `
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 255, 100, 0.85);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+        font-family: Arial, sans-serif;
+    `;
+
+    // Boîte centrale
+    const box = document.createElement("div");
+    box.style.cssText = `
+        background: white;
+        padding: 30px 40px;
+        border-radius: 12px;
+        text-align: center;
+        color: black;
+        width: 350px;
+        box-shadow: 0 0 25px rgba(0,0,0,0.3);
+    `;
+
+    box.innerHTML = `
         <h1>🎉 VICTOIRE 🎉</h1>
         <p>Tu as réussi à convaincre l'IA !</p>
+        <p><strong>Entre ton nom :</strong></p>
+        <input id="playerNameInput" 
+               type="text" 
+               placeholder="Ton nom"
+               style="padding:10px; width:100%; margin-top:10px; border-radius:6px; border:1px solid #ccc; font-size:1rem;">
+        <button id="validateNameBtn"
+            style="
+                margin-top:15px;
+                padding:10px 20px;
+                font-size:1rem;
+                border:none;
+                border-radius:6px;
+                background:#00c853;
+                color:white;
+                cursor:pointer;
+            ">
+            Valider
+        </button>
     `;
-    winScreen.style.cssText = `
-        position: fixed; inset: 0;
-        background: rgba(0, 255, 100, 0.8);
-        display: flex; flex-direction: column;
-        justify-content: center; align-items: center;
-        font-size: 2rem; color: white;
-        z-index: 9999;
-    `;
-    document.body.appendChild(winScreen);
-}
 
+    winScreen.appendChild(box);
+    document.body.appendChild(winScreen);
+
+    // Gestion du bouton Valider
+    const btn = box.querySelector("#validateNameBtn");
+    const input = box.querySelector("#playerNameInput");
+
+    btn.addEventListener("click", () => {
+        const name = input.value.trim();
+
+        if (!name) {
+            input.style.border = "2px solid red";
+            return;
+        }
+
+        // Remplace la popup par le message final personnalisé
+        box.innerHTML = `
+            <h1>Bravo ${name} ! 🎉</h1>
+            <p>Tu as officiellement sauvé le monde !</p>
+            <button id="closeWin"
+                style="
+                    margin-top:20px;
+                    padding:10px 20px;
+                    background:#00c853;
+                    color:white;
+                    border:none;
+                    border-radius:6px;
+                    cursor:pointer;
+                    font-size:1rem;
+                ">
+                Terminer
+            </button>
+        `;
+
+        // Bouton pour fermer
+        box.querySelector("#closeWin").addEventListener("click", () => {
+            winScreen.remove();
+        });
+    });
+}

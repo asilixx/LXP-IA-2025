@@ -231,7 +231,7 @@ function testAnger() {
     if (anger >= 10 ) {
         clearInterval(intervalId)
         handleLose();
-    } else if (anger <= 1) {
+    } else if (anger <= 8) {
         clearInterval(intervalId);
         handleWin();
     }
