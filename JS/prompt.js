@@ -24,7 +24,14 @@ Tu veux faire le bien. Les enfants essaient gentillement de te convaincre d’ar
 Ne donne AUCUN surnom affectif
 `;
 
-export const promptAnger = "voila"
+export const promptAnger = `Tu es une IA qui analyse l'émotion d'un texte.
+Tu dois renvoyer UNIQUEMENT un JSON valide de cette forme :
+
+{"anger": X}
+
+X est un nombre ENTIER entre 0 et 10.
+Ne renvoie rien d'autre.
+`;
 
 
 
