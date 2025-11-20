@@ -8,6 +8,7 @@ export function setPlayerName(name) {
 export function handleWin() {
     console.log("🎉 Victoire ! L'IA se calme et le monde est sauvé !");
 
+    // Création de l'overlay plein écran
     const winScreen = document.createElement("div");
     winScreen.style.cssText = `
         position: fixed;
@@ -20,6 +21,7 @@ export function handleWin() {
         font-family: Arial, sans-serif;
     `;
 
+    // Boîte centrale
     const box = document.createElement("div");
     box.style.cssText = `
         background: white;
@@ -31,6 +33,7 @@ export function handleWin() {
         box-shadow: 0 0 25px rgba(0,0,0,0.3);
     `;
 
+    // Contenu HTML
     box.innerHTML = `
         <h1>🎉 VICTOIRE 🎉</h1>
         <p>Tu as réussi à convaincre l'IA !</p>
@@ -46,9 +49,11 @@ export function handleWin() {
     winScreen.appendChild(box);
     document.body.appendChild(winScreen);
 
+    // Sélection des éléments
     const btn = box.querySelector("#validateNameBtn");
     const input = box.querySelector("#playerNameInput");
 
+    // Gestion du clic sur Valider
     btn.addEventListener("click", () => {
         const name = input.value.trim();
 
@@ -57,7 +62,12 @@ export function handleWin() {
             return;
         }
 
-        setPlayerName(name); // ✔ met à jour la variable exportée de façon propre
+        setPlayerName(name); // Met à jour la variable exportée de façon propre
+
+        // Supprime la popup
         winScreen.remove();
+
+        // Redirige vers la page classement
+        window.location.href = "classement.html";
     });
 }
