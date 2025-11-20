@@ -189,9 +189,8 @@ async function analyzeAnger(auraMessage) {
 
 
 let intervalId;
-let dixiemeglobale = 0;
-let minuteglobale = 0;
-let secondeglobale = 0;
+export let minuteglobale = 2;
+export let secondeglobale = 0;
 
 export function startTimer() {
   let minute = 2;
@@ -242,7 +241,6 @@ function angerFill(value) {
   if (!angerStyle) return; // élément non trouvé
   const n = Number(value);
   if (Number.isNaN(n)) return; // valeur invalide
-  // borne 0-10 → 0%-100%
   const width = Math.max(0, Math.min(10, Math.round(n))) * 10;
   angerStyle.style.width = width + "%";
 }

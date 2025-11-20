@@ -1,30 +1,17 @@
-let nom = "emma";
-let temps = "01:48";
+import { playerName, setPlayerName } from "./win.js";
+import { minuteglobale, secondeglobale } from "./index.js";
 
-localStorage.setItem(nom, temps);
+setInterval(() => {
+    if (playerName) {
 
-// Fonction pour convertir MM:SS → secondes
-function timeToSeconds(timeStr) {
-  const [m, s] = timeStr.split(":").map(Number);
-  return m * 60 + s;
-}
+         const chrono = `${minuteglobale}:${secondeglobale < 10 ? "0" + secondeglobale : secondeglobale}`;
 
-// Récupérer toutes les entrées du localStorage
-const entries = Object.entries(localStorage);
+        // sauvegarde dans le localStorage
+        localStorage.setItem(playerName, chrono);
 
-// Filtrer uniquement les valeurs au format MM:SS
-const users = entries
-  .filter(([nom, chrono]) => /^\d{1,2}:\d{2}$/.test(chrono))
-  .map(([nom, chrono]) => ({
-    nom,
-    chrono,
-    seconds: timeToSeconds(chrono)
-  }));
+        console.log(`✔ Score enregistré : ${playerName} → ${chrono}`);
 
-// Trier par chrono croissant
-users.sort((a, b) => a.seconds - b.seconds);
-
-// Afficher dans la console
-users.forEach(user => {
-  console.log(`${user.nom} : ${user.chrono}`);
-});
+        // empêche de sauvegarder plusieurs fois
+        setPlayerName(null);
+    }
+}, 500);

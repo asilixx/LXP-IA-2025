@@ -1,7 +1,13 @@
+export let playerName = null;
+
+// Setter pour modifier la variable depuis d'autres fichiers
+export function setPlayerName(name) {
+    playerName = name;
+}
+
 export function handleWin() {
     console.log("🎉 Victoire ! L'IA se calme et le monde est sauvé !");
 
-    // Overlay plein écran
     const winScreen = document.createElement("div");
     winScreen.style.cssText = `
         position: fixed;
@@ -14,7 +20,6 @@ export function handleWin() {
         font-family: Arial, sans-serif;
     `;
 
-    // Boîte centrale
     const box = document.createElement("div");
     box.style.cssText = `
         background: white;
@@ -30,21 +35,10 @@ export function handleWin() {
         <h1>🎉 VICTOIRE 🎉</h1>
         <p>Tu as réussi à convaincre l'IA !</p>
         <p><strong>Entre ton nom :</strong></p>
-        <input id="playerNameInput" 
-               type="text" 
-               placeholder="Ton nom"
+        <input id="playerNameInput" type="text" placeholder="Ton nom"
                style="padding:10px; width:100%; margin-top:10px; border-radius:6px; border:1px solid #ccc; font-size:1rem;">
         <button id="validateNameBtn"
-            style="
-                margin-top:15px;
-                padding:10px 20px;
-                font-size:1rem;
-                border:none;
-                border-radius:6px;
-                background:#00c853;
-                color:white;
-                cursor:pointer;
-            ">
+            style="margin-top:15px;padding:10px 20px;background:#00c853;color:white;border:none;border-radius:6px;cursor:pointer;">
             Valider
         </button>
     `;
@@ -52,7 +46,6 @@ export function handleWin() {
     winScreen.appendChild(box);
     document.body.appendChild(winScreen);
 
-    // Gestion du bouton Valider
     const btn = box.querySelector("#validateNameBtn");
     const input = box.querySelector("#playerNameInput");
 
@@ -64,28 +57,7 @@ export function handleWin() {
             return;
         }
 
-        // Remplace la popup par le message final personnalisé
-        box.innerHTML = `
-            <h1>Bravo ${name} ! 🎉</h1>
-            <p>Tu as officiellement sauvé le monde !</p>
-            <button id="closeWin"
-                style="
-                    margin-top:20px;
-                    padding:10px 20px;
-                    background:#00c853;
-                    color:white;
-                    border:none;
-                    border-radius:6px;
-                    cursor:pointer;
-                    font-size:1rem;
-                ">
-                Terminer
-            </button>
-        `;
-
-        // Bouton pour fermer
-        box.querySelector("#closeWin").addEventListener("click", () => {
-            winScreen.remove();
-        });
+        setPlayerName(name); // ✔ met à jour la variable exportée de façon propre
+        winScreen.remove();
     });
 }
