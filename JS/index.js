@@ -1,6 +1,8 @@
 const button = document.getElementById('askBtn');
 const input = document.getElementById('question');
 const chat = document.getElementById('chat');
+import { handleWin } from "/JS/win.js";
+import { handleLose } from "/JS/lose.js";
 
 import { prompts, promptAnger } from "../JS/prompt.js";
 
@@ -139,7 +141,7 @@ document.addEventListener('DOMContentLoaded', function() {
 // ======================================================
 
 // Prompt qui demande STRICTEMENT un JSON
-
+export let anger = null
 async function analyzeAnger(auraMessage) {
 
   const angerBody = {
@@ -166,7 +168,7 @@ async function analyzeAnger(auraMessage) {
     const raw = data.choices[0].message.content;
 
     // Essaie de lire le JSON
-    let anger = null;
+    anger = null;
     try {
       anger = JSON.parse(raw).anger;
     } catch (e) {
@@ -174,6 +176,7 @@ async function analyzeAnger(auraMessage) {
     }
 
     console.log("🔥 Taux d'énervement :", anger);
+    testAnger(anger)
     return anger;
 
   } catch (err) {
@@ -192,22 +195,39 @@ let secondeglobale = 0;
 export function startTimer() {
   let minute = 2;
   let seconde = 30;
-  let dixieme = 0;
+
   intervalId = setInterval(() => {
+
     seconde--;
     secondeglobale = seconde;
-    if (seconde === 60) {
-      seconde = 0;
-      secondeglobale = seconde;
+
+    // Quand les secondes passent sous 0 → on retire 1 minute
+    if (seconde < 0) {
       minute--;
       minuteglobale = minute;
-    }
-    if (seconde >= 10) {
-      dixieme = "";
-      dixiemeglobale = dixieme;
+      seconde = 59;  // on repart sur 59 sec
+      secondeglobale = seconde;
     }
 
+    // Affichage formaté
     const timerDisplay = document.getElementById("timer");
-    timerDisplay.textContent = `Timer : ${minute}'${dixieme}${seconde}`;
+    const secDisplay = seconde < 10 ? "0" + seconde : seconde;
+    timerDisplay.textContent = `Timer : ${minute}'${secDisplay}`;
+
+    // Timer terminé ?
+    if (minute <= 0 && seconde <= 0) {
+      clearInterval(intervalId);
+      timerDisplay.textContent = "Timer : 0'00";
+    }
+
   }, 1000);
+}
+
+
+function testAnger() {
+    if (anger >= 10) {
+        handleLose();
+    } else if (anger <= 1) {
+        handleWin();
+    }
 }
