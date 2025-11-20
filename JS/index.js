@@ -16,11 +16,7 @@ const history = [ {
   content: prompts
 }];
 
-// const iaAnger = [{
-//   role: "system",
-//   content: promptAnger
-// }]
-// ;
+
 
 const URL = "https://ollama.api.homelab.chalumoid.fr/v1/chat/completions";
 const TOKEN = "sk-6VAwClwYxrltMQORMz2m6w";
@@ -83,6 +79,7 @@ button.addEventListener('click', async () => {
 
     // Ajoute la réponse de l'IA à l'historique
     history.push({ role: "assistant", content: aiMessage });
+    analyzeAnger(aiMessage);
 
   } catch (err) {
     loadingDiv.textContent = 'Erreur : ' + err.message;
@@ -136,6 +133,55 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('nextBtn').addEventListener('click', showNextStep);
     showRulesWithNextButton();
 });
+
+// ======================================================
+// IA 2 : Analyseur du taux d’énervement
+// ======================================================
+
+// Prompt qui demande STRICTEMENT un JSON
+
+async function analyzeAnger(auraMessage) {
+
+  const angerBody = {
+    model: "gemma3:4b",
+    messages: [
+      { role: "system", content: promptAnger },
+      { role: "user", content: auraMessage }
+    ],
+    keep_alive: -1,
+    stream: false
+  };
+
+  try {
+    const res = await fetch(URL, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${TOKEN}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(angerBody)
+    });
+
+    const data = await res.json();
+    const raw = data.choices[0].message.content;
+
+    // Essaie de lire le JSON
+    let anger = null;
+    try {
+      anger = JSON.parse(raw).anger;
+    } catch (e) {
+      console.warn("Analyseur : JSON invalide reçu →", raw);
+    }
+
+    console.log("🔥 Taux d'énervement :", anger);
+    return anger;
+
+  } catch (err) {
+    console.error("Erreur analyse IA :", err);
+    return null;
+  }
+}
+
 
 
 let intervalId;
