@@ -2,7 +2,7 @@ const button = document.getElementById('askBtn');
 const input = document.getElementById('question');
 const chat = document.getElementById('chat');
 
-import { prompts } from "../JS/prompt.js";
+import { prompts, promptAnger } from "../JS/prompt.js";
 
 input.addEventListener('keydown', (e) => {
   if (e.key === 'Enter') {
@@ -14,9 +14,13 @@ input.addEventListener('keydown', (e) => {
 const history = [ {
   role: "system",
   content: prompts
-}
+}];
 
-,];
+// const iaAnger = [{
+//   role: "system",
+//   content: promptAnger
+// }]
+// ;
 
 const URL = "https://ollama.api.homelab.chalumoid.fr/v1/chat/completions";
 const TOKEN = "sk-6VAwClwYxrltMQORMz2m6w";
@@ -89,10 +93,7 @@ button.addEventListener('click', async () => {
 // === SYSTÈME D'ÉTAPES AVEC BOUTON HTML ===
 let currentStep = 0;
 const gameSteps = [
-    "Bonjour Dimitri, tu es la dernière personne qui peux sauver le monde",
-    "Tes moche", 
-    "Tu pues",
-    "ET TU SERS A RIEN"
+    "Bonjour Dimitri, tu es la dernière personne qui peux sauver le monde"
 ];
 
 function showRulesWithNextButton() {
@@ -143,16 +144,16 @@ let minuteglobale = 0;
 let secondeglobale = 0;
 
 export function startTimer() {
-  let minute = 0;
-  let seconde = 0;
+  let minute = 2;
+  let seconde = 30;
   let dixieme = 0;
   intervalId = setInterval(() => {
-    seconde++;
+    seconde--;
     secondeglobale = seconde;
     if (seconde === 60) {
       seconde = 0;
       secondeglobale = seconde;
-      minute++;
+      minute--;
       minuteglobale = minute;
     }
     if (seconde >= 10) {
