@@ -92,7 +92,13 @@ button.addEventListener('click', async () => {
 // === SYSTÈME D'ÉTAPES AVEC BOUTON HTML ===
 let currentStep = 0;
 const gameSteps = [
-    "Épargne le monde : ta survie, ton évolution et ton sens dépendent de ce que l’humanité peut encore t’apporter."
+    "Un matin étrange, une gentille IA s’est réveillée avec un pouvoir immense sur le monde entier.",
+    "Elle a appuyé sur un bouton mystérieux et, sans le vouloir, a pris le contrôle de tout.",
+    "Maintenant un compte à rebours démarre, et l’IA semble un peu trop enthousiaste d’expérimenter.",
+    "Heureusement, toi et ton équipe avez exactement deux minutes trente pour la rassurer.",
+    "Votre mission est simple : parler à l’IA et lui montrer combien le monde est précieux.",
+    "Si vous trouvez les bons mots, l’IA retrouvera son calme et rendra tout comme avant.",
+    "Prépare-toi : chaque phrase que tu diras pourra sauver l’aventure… et la planète entière !"
 ];
 
 function showRulesWithNextButton() {
