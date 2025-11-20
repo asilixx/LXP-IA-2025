@@ -139,22 +139,13 @@ document.addEventListener('DOMContentLoaded', function() {
 // ======================================================
 
 // Prompt qui demande STRICTEMENT un JSON
-const angerPrompt = `
-Tu es une IA qui analyse l'émotion d'un texte.
-Tu dois renvoyer UNIQUEMENT un JSON valide de cette forme :
-
-{"anger": X}
-
-X est un nombre ENTIER entre 0 et 10.
-Ne renvoie rien d'autre.
-`;
 
 async function analyzeAnger(auraMessage) {
 
   const angerBody = {
     model: "gemma3:4b",
     messages: [
-      { role: "system", content: angerPrompt },
+      { role: "system", content: promptAnger },
       { role: "user", content: auraMessage }
     ],
     keep_alive: -1,
