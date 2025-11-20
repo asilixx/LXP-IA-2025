@@ -218,14 +218,16 @@ export function startTimer() {
     if (minute <= 0 && seconde <= 0) {
       clearInterval(intervalId);
       timerDisplay.textContent = "Timer : 0'00";
+      handleLose();
     }
 
   }, 1000);
 }
 
 
+
 function testAnger() {
-    if (anger >= 10) {
+    if (anger >= 10 ) {
         handleLose();
     } else if (anger <= 1) {
         handleWin();
