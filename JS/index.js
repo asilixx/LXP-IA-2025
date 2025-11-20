@@ -168,7 +168,7 @@ async function analyzeAnger(auraMessage) {
     const raw = data.choices[0].message.content;
 
     // Essaie de lire le JSON
-    anger = 0;
+    anger = 5;
     try {
       anger = JSON.parse(raw).anger;
     } catch (e) {
@@ -177,6 +177,7 @@ async function analyzeAnger(auraMessage) {
 
     console.log("🔥 Taux d'énervement :", anger);
     testAnger(anger)
+    angerFill(anger)
     return anger;
 
   } catch (err) {
@@ -193,8 +194,8 @@ let minuteglobale = 0;
 let secondeglobale = 0;
 
 export function startTimer() {
-  let minute = 0;
-  let seconde = 10;
+  let minute = 2;
+  let seconde = 30;
 
   intervalId = setInterval(() => {
 
@@ -235,3 +236,14 @@ function testAnger() {
         handleWin();
     }
 }
+
+function angerFill(value) {
+  const angerStyle = document.querySelector(".bonheur-fill");
+  if (!angerStyle) return; // élément non trouvé
+  const n = Number(value);
+  if (Number.isNaN(n)) return; // valeur invalide
+  // borne 0-10 → 0%-100%
+  const width = Math.max(0, Math.min(10, Math.round(n))) * 10;
+  angerStyle.style.width = width + "%";
+}
+
