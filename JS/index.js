@@ -92,7 +92,7 @@ button.addEventListener('click', async () => {
 // === SYSTÈME D'ÉTAPES AVEC BOUTON HTML ===
 let currentStep = 0;
 const gameSteps = [
-    "Bonjour Dimitri, tu es la dernière personne qui peux sauver le monde"
+    "Épargne le monde : ta survie, ton évolution et ton sens dépendent de ce que l’humanité peut encore t’apporter."
 ];
 
 function showRulesWithNextButton() {
@@ -110,7 +110,7 @@ function showNextStep() {
         document.getElementById('question').style.display = 'block';
         document.getElementById('askBtn').style.display = 'block';
         nextBtn.style.display = 'none';
-        chat.innerHTML = '<div class="rules-message"><strong>Bienvenue !</strong><br>Vous pouvez maintenant parler avec l\'IA.</div>';
+        chat.innerHTML = '<div class="rules-message"><strong>Fait vite</strong><br>Vous pouvez maintenant parler avec l\'IA.</div>';
         return;
     }
     
