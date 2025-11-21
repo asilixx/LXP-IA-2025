@@ -12,11 +12,11 @@ const TOKEN = "sk-6VAwClwYxrltMQORMz2m6w";
 const history = [{ role: "system", content: prompts }];
 
 // --- Etat global ---
-export let remainingSeconds = 150; // 2 min 30
+export let remainingSeconds = 210; // 2 min 30
 let intervalId = null;
 
 // ---------------- TIMER ----------------
-export function startTimer(initialSeconds = 150) {
+export function startTimer(initialSeconds = 210) {
   remainingSeconds = initialSeconds;
   intervalId = setInterval(() => {
     remainingSeconds--;
