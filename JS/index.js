@@ -1,9 +1,10 @@
-const button = document.getElementById("askBtn");
-const input = document.getElementById("question");
-const chat = document.getElementById("chat");
 import { handleWin } from "/JS/win.js";
 import { handleLose } from "/JS/lose.js";
 import { prompts } from "../JS/prompt.js";
+
+const button = document.getElementById("askBtn");
+const input = document.getElementById("question");
+const chat = document.getElementById("chat");
 
 const URL = "https://ollama.api.homelab.chalumoid.fr/v1/chat/completions";
 const TOKEN = "sk-6VAwClwYxrltMQORMz2m6w";
@@ -23,19 +24,21 @@ export function startTimer(initialSeconds = 150) {
     const timerDisplay = document.getElementById("timer");
     const minutes = Math.floor(remainingSeconds / 60);
     const seconds = remainingSeconds % 60;
-    timerDisplay.textContent = `Timer : ${minutes}'${seconds < 10 ? "0" : ""}${seconds}`;
+    if(timerDisplay) {
+      timerDisplay.textContent = `Timer : ${minutes}'${seconds < 10 ? "0" : ""}${seconds}`;
+    }
 
     if (remainingSeconds <= 0) {
       clearInterval(intervalId);
       remainingSeconds = 0;
-      timerDisplay.textContent = "Timer : 0'00";
+      if(timerDisplay) timerDisplay.textContent = "Timer : 0'00";
       handleLose();
     }
   }, 1000);
 }
 
 // ---------------- BARRE D'ENERVEMENT ----------------
-function angerFill(value) {
+export function angerFill(value) {
   const angerStyle = document.querySelector(".bonheur-fill");
   if (!angerStyle) return;
   const n = Number(value);
@@ -44,11 +47,12 @@ function angerFill(value) {
 }
 
 // ---------------- TEST GAGNER/PERDRE ----------------
-function testAnger(value) {
+export function testAnger(value) {
+  console.log("testAnger appelé avec value =", value);
   if (value >= 10) {
     clearInterval(intervalId);
     handleLose();
-  } else if (value <= 0) {
+  } else if (value <= 8) {
     clearInterval(intervalId);
     handleWin();
   }
@@ -139,6 +143,8 @@ button.addEventListener("click", async () => {
     // Met à jour la barre d'énervement et vérifie victoire/défaite
     angerFill(angerLevel);
     testAnger(angerLevel);
+
+    console.log("AngerLevel reçu :", angerLevel);
 
   } catch (err) {
     loadingDiv.textContent = "Erreur : " + err.message;
