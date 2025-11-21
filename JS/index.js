@@ -3,7 +3,6 @@ const input = document.getElementById("question");
 const chat = document.getElementById("chat");
 import { handleWin } from "/JS/win.js";
 import { handleLose } from "/JS/lose.js";
-
 import { prompts, promptAnger } from "../JS/prompt.js";
 import { runIA2 } from "./test_ia2.js";
 
@@ -21,8 +20,22 @@ const history = [
   },
 ];
 
-const URL = "https://ollama.api.homelab.chalumoid.fr/v1/chat/completions";
-const TOKEN = "sk-6VAwClwYxrltMQORMz2m6w";
+    if (remainingSeconds <= 0) {
+      clearInterval(intervalId);
+      remainingSeconds = 0;
+      timerDisplay.textContent = "Timer : 0'00";
+      handleLose();
+    }
+  }, 1000);
+}
+
+export function getMinute() {
+  return Math.floor(remainingSeconds / 60);
+}
+
+export function getSecond() {
+  return remainingSeconds % 60;
+}
 
 button.addEventListener("click", async () => {
   console.log("CLICK");
@@ -64,10 +77,11 @@ button.addEventListener("click", async () => {
     });
 
     const data = await res.json();
-    const aiMessage = data.choices[0].message.content;
+    const response = JSON.parse(data.choices[0].message.content);
 
     chat.removeChild(loadingDiv);
 
+    chat.removeChild(loadingDiv);
     button.disabled = false;
 
     const aiDiv = document.createElement("div");
@@ -191,7 +205,6 @@ async function analyzeAnger(auraMessage) {
     console.error("Erreur analyse IA :", err);
     return null;
   }
-}
 
 let intervalId;
 export let minuteglobale = 2;
