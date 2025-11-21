@@ -52,7 +52,7 @@ export function testAnger(value) {
   if (value >= 10) {
     clearInterval(intervalId);
     handleLose();
-  } else if (value <= 8) {
+  } else if (value <= 0) {
     clearInterval(intervalId);
     handleWin();
   }
@@ -203,3 +203,18 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("nextBtn").addEventListener("click", showNextStep);
   showRulesWithNextButton();
 });
+
+function moveMonster() {
+    const monster = document.getElementById("monstre");
+    const screenWidth = window.innerWidth;
+    const screenHeight = window.innerHeight;
+    const monsterWidth = monster.offsetWidth;
+    const monsterHeight = monster.offsetHeight;
+    const randomX = Math.random() * (screenWidth - monsterWidth);
+    const randomY = Math.random() * (screenHeight - monsterHeight - 150); 
+    monster.style.transition = "transform 3s ease-in-out";
+    monster.style.transform = `translate(${randomX}px, ${randomY}px)`;
+}
+
+setInterval(moveMonster, 3000);
+setTimeout(moveMonster, 500);
