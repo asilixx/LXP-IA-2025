@@ -1,39 +1,28 @@
 export let playerName = null;
 
-// Setter pour modifier la variable depuis d'autres fichiers
 export function setPlayerName(name) {
     playerName = name;
 }
 
+import { remainingSeconds } from "./index.js"; // pour récupérer le chrono
+
 export function handleWin() {
     console.log("🎉 Victoire ! L'IA se calme et le monde est sauvé !");
 
-    // Création de l'overlay plein écran
     const winScreen = document.createElement("div");
     winScreen.style.cssText = `
-        position: fixed;
-        inset: 0;
-        background: rgba(0, 255, 100, 0.85);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 9999;
+        position: fixed; inset: 0; background: rgba(0, 255, 100, 0.85);
+        display: flex; justify-content: center; align-items: center; z-index: 9999;
         font-family: Arial, sans-serif;
     `;
 
-    // Boîte centrale
     const box = document.createElement("div");
     box.style.cssText = `
-        background: white;
-        padding: 30px 40px;
-        border-radius: 12px;
-        text-align: center;
-        color: black;
-        width: 350px;
+        background: white; padding: 30px 40px; border-radius: 12px;
+        text-align: center; color: black; width: 350px;
         box-shadow: 0 0 25px rgba(0,0,0,0.3);
     `;
 
-    // Contenu HTML
     box.innerHTML = `
         <h1>🎉 VICTOIRE 🎉</h1>
         <p>Tu as réussi à convaincre l'IA !</p>
@@ -49,25 +38,35 @@ export function handleWin() {
     winScreen.appendChild(box);
     document.body.appendChild(winScreen);
 
-    // Sélection des éléments
     const btn = box.querySelector("#validateNameBtn");
     const input = box.querySelector("#playerNameInput");
 
-    // Gestion du clic sur Valider
-    btn.addEventListener("click", () => {
-        const name = input.value.trim();
+   btn.addEventListener("click", () => {
+    const name = input.value.trim();
 
-        if (!name) {
-            input.style.border = "2px solid red";
-            return;
-        }
+    if (!name) {
+        input.style.border = "2px solid red";
+        return;
+    }
 
-        setPlayerName(name); // Met à jour la variable exportée de façon propre
+    setPlayerName(name); // Met à jour la variable exportée
 
-        // Supprime la popup
-        winScreen.remove();
+    // Calcul du temps écoulé
+    const TOTAL_TIME = 150; // 2 min 30
+    const elapsed = TOTAL_TIME - remainingSeconds; // remainingSeconds vient de index.js
+    const minutes = Math.floor(elapsed / 60);
+    const seconds = elapsed % 60;
+    const chrono = `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
 
-        // Redirige vers la page classement
-        window.location.href = "classement.html";
-    });
+    // Sauvegarde dans localStorage
+    localStorage.setItem(name, chrono);
+    console.log(`✔ Score enregistré : ${name} → ${chrono}`);
+
+    // Supprime la popup
+    winScreen.remove();
+
+    // Redirige vers classement
+    window.location.href = "classement.html";
+});
+
 }
