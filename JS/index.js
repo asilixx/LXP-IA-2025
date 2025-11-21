@@ -3,22 +3,27 @@ const input = document.getElementById("question");
 const chat = document.getElementById("chat");
 import { handleWin } from "/JS/win.js";
 import { handleLose } from "/JS/lose.js";
-import { prompts, promptAnger } from "../JS/prompt.js";
-import { runIA2 } from "./test_ia2.js";
+import { prompts } from "../JS/prompt.js";
 
-input.addEventListener("keydown", (e) => {
-  if (e.key === "Enter") {
-    e.preventDefault(); // évite le saut de ligne
-    button.click();
-  }
-});
+const URL = "https://ollama.api.homelab.chalumoid.fr/v1/chat/completions";
+const TOKEN = "sk-6VAwClwYxrltMQORMz2m6w";
 
-const history = [
-  {
-    role: "system",
-    content: prompts,
-  },
-];
+const history = [{ role: "system", content: prompts }];
+
+// --- Etat global ---
+export let remainingSeconds = 150; // 2 min 30
+let intervalId = null;
+
+// ---------------- TIMER ----------------
+export function startTimer(initialSeconds = 150) {
+  remainingSeconds = initialSeconds;
+  intervalId = setInterval(() => {
+    remainingSeconds--;
+
+    const timerDisplay = document.getElementById("timer");
+    const minutes = Math.floor(remainingSeconds / 60);
+    const seconds = remainingSeconds % 60;
+    timerDisplay.textContent = `Timer : ${minutes}'${seconds < 10 ? "0" : ""}${seconds}`;
 
     if (remainingSeconds <= 0) {
       clearInterval(intervalId);
@@ -29,17 +34,35 @@ const history = [
   }, 1000);
 }
 
-export function getMinute() {
-  return Math.floor(remainingSeconds / 60);
+// ---------------- BARRE D'ENERVEMENT ----------------
+function angerFill(value) {
+  const angerStyle = document.querySelector(".bonheur-fill");
+  if (!angerStyle) return;
+  const n = Number(value);
+  if (Number.isNaN(n)) return;
+  angerStyle.style.width = `${Math.max(0, Math.min(10, Math.round(n))) * 10}%`;
 }
 
-export function getSecond() {
-  return remainingSeconds % 60;
+// ---------------- TEST GAGNER/PERDRE ----------------
+function testAnger(value) {
+  if (value >= 10) {
+    clearInterval(intervalId);
+    handleLose();
+  } else if (value <= 0) {
+    clearInterval(intervalId);
+    handleWin();
+  }
 }
+
+// ---------------- ENVOI MESSAGE UTILISATEUR ----------------
+input.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
+    e.preventDefault();
+    button.click();
+  }
+});
 
 button.addEventListener("click", async () => {
-  console.log("CLICK");
-
   const message = input.value.trim();
   if (!message) return;
 
@@ -55,15 +78,29 @@ button.addEventListener("click", async () => {
   const loadingDiv = document.createElement("div");
   loadingDiv.textContent = "Chargement…";
   chat.appendChild(loadingDiv);
-
   button.disabled = true;
-  chat.scrollTop = chat.scrollHeight;
 
   const body = {
     model: "gemma3:4b",
     messages: history,
     keep_alive: -1,
     stream: false,
+    response_format: {
+      type: "json_schema",
+      json_schema: {
+        name: "response_to_student",
+        schema: {
+          type: "object",
+          properties: {
+            reponse: { type: "string" },
+            angerlevel: { type: "integer" },
+          },
+          required: ["reponse", "angerlevel"],
+          additionalProperties: false,
+        },
+        strict: true,
+      },
+    },
   };
 
   try {
@@ -77,40 +114,39 @@ button.addEventListener("click", async () => {
     });
 
     const data = await res.json();
-    const response = JSON.parse(data.choices[0].message.content);
 
-    chat.removeChild(loadingDiv);
+    let response;
+    try {
+      response = JSON.parse(data.choices[0].message.content);
+    } catch (e) {
+      console.warn("⚠️ JSON invalide reçu →", data.choices[0].message.content);
+      response = { reponse: "Erreur IA", angerlevel: 5 };
+    }
 
-    chat.removeChild(loadingDiv);
-    button.disabled = false;
+    const aiMessage = response.reponse;
+    const angerLevel = response.angerlevel;
 
     const aiDiv = document.createElement("div");
     aiDiv.textContent = "IA : " + aiMessage;
     chat.appendChild(aiDiv);
     chat.scrollTop = chat.scrollHeight;
 
+    chat.removeChild(loadingDiv);
+    button.disabled = false;
+
     history.push({ role: "assistant", content: aiMessage });
-    // console.log(history);
 
-    let discussion = "";
+    // Met à jour la barre d'énervement et vérifie victoire/défaite
+    angerFill(angerLevel);
+    testAnger(angerLevel);
 
-    for (let i = 0; i < history.length; i++) {
-      if (history[i].role === "system") {
-        continue;
-      }
-      discussion += `${history[i].role}: ${history[i].content}\n`;
-    }
-
-    // analyzeAnger(aiMessage);
-    runIA2(discussion);
-
-    console.log(discussion);
   } catch (err) {
     loadingDiv.textContent = "Erreur : " + err.message;
     button.disabled = false;
   }
 });
 
+// ---------------- GESTION DES ÉTAPES ----------------
 let currentStep = 0;
 const gameSteps = [
   "Un matin étrange, une gentille IA s’est réveillée avec un pouvoir immense sur le monde entier.",
@@ -157,102 +193,7 @@ function showNextStep() {
   }
 }
 
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("nextBtn").addEventListener("click", showNextStep);
   showRulesWithNextButton();
 });
-
-export let angerGlobal = 5;
-export let anger = null;
-async function analyzeAnger(auraMessage) {
-  const angerBody = {
-    model: "gemma3:4b",
-    messages: [
-      { role: "system", content: promptAnger },
-      { role: "user", content: auraMessage },
-    ],
-    keep_alive: -1,
-    stream: false,
-  };
-
-  try {
-    const res = await fetch(URL, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${TOKEN}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(angerBody),
-    });
-
-    const data = await res.json();
-    const raw = data.choices[0].message.content;
-
-    // Essaie de lire le JSON
-    angerGlobal = 5;
-    try {
-      console.log(raw);
-      anger = JSON.parse(raw).anger;
-    } catch (e) {
-      console.warn("Analyseur : JSON invalide reçu →", raw);
-    }
-
-    console.log("🔥 Taux d'énervement :", angerGlobal - anger);
-    testAnger(angerGlobal);
-    angerFill(angerGlobal);
-    return angerGlobal;
-  } catch (err) {
-    console.error("Erreur analyse IA :", err);
-    return null;
-  }
-
-let intervalId;
-export let minuteglobale = 2;
-export let secondeglobale = 0;
-
-export function startTimer() {
-  let minute = 2;
-  let seconde = 30;
-
-  intervalId = setInterval(() => {
-    seconde--;
-    secondeglobale = seconde;
-
-    if (seconde < 0) {
-      minute--;
-      minuteglobale = minute;
-      seconde = 59;
-      secondeglobale = seconde;
-    }
-
-    // Affichage formaté
-    const timerDisplay = document.getElementById("timer");
-    const secDisplay = seconde < 10 ? "0" + seconde : seconde;
-    timerDisplay.textContent = `Timer : ${minute}'${secDisplay}`;
-
-    if (minute <= 0 && seconde <= 0) {
-      clearInterval(intervalId);
-      timerDisplay.textContent = "Timer : 0'00";
-      handleLose();
-    }
-  }, 1000);
-}
-
-function testAnger() {
-  if (anger >= 10) {
-    clearInterval(intervalId);
-    handleLose();
-  } else if (anger <= 0) {
-    clearInterval(intervalId);
-    handleWin();
-  }
-}
-
-function angerFill(value) {
-  const angerStyle = document.querySelector(".bonheur-fill");
-  if (!angerStyle) return;
-  const n = Number(value);
-  if (Number.isNaN(n)) return;
-  const width = Math.max(0, Math.min(10, Math.round(n))) * 10;
-  angerStyle.style.width = width + "%";
-}
