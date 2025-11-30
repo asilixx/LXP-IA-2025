@@ -63,11 +63,11 @@ Il suffit d’ouvrir index.html dans un navigateur.
 
 Projet réalisé par :
 
-Astar2493
+asilix ( Paul )
 
-cimc0
+Astar2493 ( Mael )
 
-asiliox
+cimc0 ( Dimitri )
 
 📜 Licence
 
